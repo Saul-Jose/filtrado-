@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extraer Números</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+  }
+  textarea {
+    width: 90%;
+    max-width: 600px;
+    height: 200px;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  #output {
+    width: 90%;
+    max-width: 600px;
+    height: 50px;
+    padding: 10px;
+    font-size: 16px;
+    background: #fff;
+    border: 1px solid #ccc;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h2>Extraer Números del Texto</h2>
+
+<textarea id="input" placeholder="Pega aquí tu texto..."></textarea>
+<div id="output"></div>
+<button id="copyBtn">Copiar al portapapeles</button>
+
+<script>
+const input = document.getElementById('input');
+const output = document.getElementById('output');
+const copyBtn = document.getElementById('copyBtn');
+
+function extractNumbers(text) {
+  const lines = text.split('\n'); // Dividir por líneas
+  const numbers = [];
+
+  lines.forEach(line => {
+    // Ignorar líneas que tengan letras
+    if (!/[a-zA-Z]/.test(line)) {
+      // Extraer todos los números de la línea
+      const nums = line.match(/\d+/g);
+      if (nums) numbers.push(...nums);
+    }
+  });
+
+  return numbers.join(' ');
+}
+
+// Procesar en tiempo real mientras se escribe o pega
+input.addEventListener('input', () => {
+  output.textContent = extractNumbers(input.value);
+});
+
+// Copiar al portapapeles
+copyBtn.addEventListener('click', () => {
+  navigator.clipboard.writeText(output.textContent)
+    .then(() => alert('Números copiados al portapapeles!'))
+    .catch(err => alert('Error al copiar: ' + err));
+});
+</script>
+
+</body>
+</html>
